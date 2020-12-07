@@ -1,0 +1,52 @@
+import React, { useLayoutEffect, useRef } from 'react'
+import './Sky.css';
+import Images1 from './Images/cloud1.png';
+import Images2 from './Images/cloud2.png';
+import Images3 from './Images/cloud3.png';
+
+const Sky = () => {
+
+    const cloudAnimation = useRef(null);
+
+    useLayoutEffect(() => {
+
+        var cloudFrames = [
+            { transform : 'translateX(90%)'},
+            { transform : 'translateX(-100%)'}
+        ];
+
+        var cloudTiming = {
+            duration: 36000,
+            playbackRate: -2,
+            iterations: Infinity
+        };
+
+        var cloudMovement = cloudAnimation.current.animate(cloudFrames, cloudTiming);
+        cloudMovement.currentTime = cloudMovement.effect.getTiming().duration / 2
+
+        setInterval(function() {
+            if (cloudMovement.playbackRate > 0.4) {
+                cloudMovement.playbackRate *= 0.9;
+            }
+        }, 3000);
+
+        var moveFast = function() {
+            cloudMovement.playbackRate *= 1.1;
+        }
+
+        document.addEventListener("click", moveFast);
+        
+    })
+
+    return (
+        <div className="sky">
+           <div className="clouds" ref={cloudAnimation}>
+                <img src={Images1} alt="cloud1" />
+                <img src={Images2} alt="cloud2" />
+                <img src={Images3} alt="cloud3" />
+           </div>
+        </div>
+    )
+}
+
+export default Sky;
